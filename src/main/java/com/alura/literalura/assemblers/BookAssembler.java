@@ -8,13 +8,13 @@ import java.net.http.HttpResponse;
 
 public class BookAssembler {
 
-    public Book fromResponseToDTO(HttpResponse<String> response) throws JsonProcessingException {
+    public Book fromResponseToDTO(HttpResponse<String> response)  {
         ObjectMapper objectMapper = new ObjectMapper();
         String body = response.body();
         try {
             return objectMapper.readValue(body,Book.class);
         } catch (JsonProcessingException e) {
-            throw new JsonProcessingException("teste");
+            throw new RuntimeException(e);
         }
     }
 }
