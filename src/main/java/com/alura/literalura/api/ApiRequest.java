@@ -8,8 +8,8 @@ import java.net.http.HttpResponse;
 
 public class ApiRequest {
 
-    public HttpResponse<String> getBooks(Integer bookId) throws IOException, InterruptedException {
-        final String URL = "https://gutendex.com/books/"+bookId;
+    public HttpResponse<String> getBookById(Integer bookId) throws IOException, InterruptedException {
+        final String URL = String.format("https://gutendex.com/books/%d/",bookId);
         HttpClient httpClient = HttpClient.newBuilder().build();
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(URI.create(URL))

@@ -1,14 +1,20 @@
 package com.alura.literalura.assemblers;
 
 import com.alura.literalura.dto.Book;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.net.http.HttpResponse;
 
 public class BookAssembler {
 
-    public Book fromResponseToDTO(HttpResponse<String> response){
+    public Book fromResponseToDTO(HttpResponse<String> response) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.convertValue(response.body(),Book.class);
+        String body = response.body();
+        try {
+            return objectMapper.readValue(body,Book.class);
+        } catch (JsonProcessingException e) {
+            throw new JsonProcessingException("teste");
+        }
     }
 }
