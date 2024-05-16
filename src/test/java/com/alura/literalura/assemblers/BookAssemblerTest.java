@@ -60,7 +60,7 @@ class BookAssemblerTest {
                                 "download_count":94
                                 }""";
         when(mockResponse.body()).thenReturn(rawBookResponse);
-        Book book = this.bookAssembler.fromResponseToDTO(this.apiRequest.getBookById(87));
+        Book book = this.apiRequest.getBookById(87);
         assertEquals("The 1993 CIA World Factbook", book.title());
         assertEquals(List.of("en"), book.languages());
         assertEquals(94, book.download_count());
