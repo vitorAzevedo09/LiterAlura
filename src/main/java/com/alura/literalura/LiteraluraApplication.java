@@ -38,6 +38,7 @@ public class LiteraluraApplication implements CommandLineRunner {
 			System.out.println("1 - Pesquisar Por Título");
 			System.out.println("2 - Listar todos os Livros já buscados");
 			System.out.println("3 - Listar todos os Autores de Livros já buscados");
+			System.out.println("4 - Listar todos os Autores de Livros já buscados vivos em um ano");
 			System.out.println("0 - Sair \n");
 			System.out.print("Insira a opção escolhida: ");
 
@@ -55,6 +56,9 @@ public class LiteraluraApplication implements CommandLineRunner {
 					break;
 				case 3:
 					showAllAuthorsInDB();
+					break;
+				case 4:
+					showAllAuthorsAliveInDB(scanner);
 					break;
 				default:
 					System.out.println("Opção inválida, por favor escolha novamente.");
@@ -95,9 +99,8 @@ public class LiteraluraApplication implements CommandLineRunner {
 		}
 	}
 
-	private void showAllAuthorsInDB() throws IOException, InterruptedException {
+	private void templateAuthors(List<Author> authors) {
 		System.out.println("Carregando, por favor espere...");
-		List<Author> authors = bookService.getAllAuthorsInDB();
 		for (Author author : authors) {
 			System.out.println("-----------------------------------------------");
 			System.out.println("Autor do Livro: " + author.getName());
@@ -105,5 +108,17 @@ public class LiteraluraApplication implements CommandLineRunner {
 			System.out.println("Ano de Falecimento: " + author.getDeath_year());
 			System.out.println("-----------------------------------------------");
 		}
+	}
+
+	private void showAllAuthorsInDB() throws IOException, InterruptedException {
+		List<Author> authors = bookService.getAllAuthorsInDB();
+		templateAuthors(authors);
+	}
+
+	private void showAllAuthorsAliveInDB(Scanner scanner) throws IOException, InterruptedException {
+		System.out.println("Digite o ano escolhido: ");
+		Integer year = scanner.nextInt();
+		List<Author> authors = bookService.getAllAuthorsInDBAliveInYear(year);
+		templateAuthors(authors);
 	}
 }

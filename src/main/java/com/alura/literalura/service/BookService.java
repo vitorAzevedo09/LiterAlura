@@ -62,4 +62,8 @@ public class BookService {
     return authorRepository.findAll();
   }
 
+  public List<Author> getAllAuthorsInDBAliveInYear(Integer year) {
+    return authorRepository.findAuthorsAliveInYear(year);
+  }
+
 }
