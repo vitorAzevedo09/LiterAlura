@@ -1,5 +1,6 @@
 package com.alura.literalura;
 
+import com.alura.literalura.entities.Author;
 import com.alura.literalura.entities.Book;
 import com.alura.literalura.service.BookService;
 
@@ -36,6 +37,7 @@ public class LiteraluraApplication implements CommandLineRunner {
 			System.out.println("Selecione uma opção: ");
 			System.out.println("1 - Pesquisar Por Título");
 			System.out.println("2 - Listar todos os Livros já buscados");
+			System.out.println("3 - Listar todos os Autores de Livros já buscados");
 			System.out.println("0 - Sair \n");
 			System.out.print("Insira a opção escolhida: ");
 
@@ -50,6 +52,9 @@ public class LiteraluraApplication implements CommandLineRunner {
 					break;
 				case 2:
 					showAllBooksInDB();
+					break;
+				case 3:
+					showAllAuthorsInDB();
 					break;
 				default:
 					System.out.println("Opção inválida, por favor escolha novamente.");
@@ -86,6 +91,18 @@ public class LiteraluraApplication implements CommandLineRunner {
 			System.out.println("Autor do Livro: " + book.getAuthorName());
 			System.out.println("Idioma do Livro: " + book.getLanguage());
 			System.out.println("Número de Downloads do Livro: " + book.getDownload_count());
+			System.out.println("-----------------------------------------------");
+		}
+	}
+
+	private void showAllAuthorsInDB() throws IOException, InterruptedException {
+		System.out.println("Carregando, por favor espere...");
+		List<Author> authors = bookService.getAllAuthorsInDB();
+		for (Author author : authors) {
+			System.out.println("-----------------------------------------------");
+			System.out.println("Autor do Livro: " + author.getName());
+			System.out.println("Ano de Nascimento: " + author.getBirth_year());
+			System.out.println("Ano de Falecimento: " + author.getDeath_year());
 			System.out.println("-----------------------------------------------");
 		}
 	}

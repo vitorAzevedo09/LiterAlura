@@ -31,7 +31,7 @@ public class ApiRequest {
     }
 
     public List<BookDTO> searchByTitle(String title) throws IOException, InterruptedException {
-        final String URL = String.format("https://gutendex.com/books/?search=%s", title);
+        final String URL = "https://gutendex.com/books/?search=" + title.replace(" ", "%20");
         HttpClient httpClient = HttpClient.newBuilder().build();
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(URI.create(URL))
