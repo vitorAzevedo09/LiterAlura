@@ -1,7 +1,8 @@
 package com.alura.literalura.assemblers;
 
 import com.alura.literalura.api.ApiRequest;
-import com.alura.literalura.dto.Book;
+import com.alura.literalura.dto.BookDTO;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,17 +17,13 @@ import static org.mockito.Mockito.when;
 
 class BookAssemblerTest {
 
-    private BookAssembler bookAssembler;
-
     @Autowired
     private ApiRequest apiRequest;
 
     @BeforeEach
-    void initializeAssembler(){
-        this.bookAssembler = new BookAssembler();
+    void initializeAssembler() {
         this.apiRequest = new ApiRequest();
     }
-
 
     @Test
     void fromResponseToDTO() throws IOException, InterruptedException {
@@ -60,7 +57,7 @@ class BookAssemblerTest {
                                 "download_count":94
                                 }""";
         when(mockResponse.body()).thenReturn(rawBookResponse);
-        Book book = this.apiRequest.getBookById(87);
+        BookDTO book = this.apiRequest.getBookById(87);
         assertEquals("The 1993 CIA World Factbook", book.title());
         assertEquals(List.of("en"), book.languages());
         assertEquals(94, book.download_count());

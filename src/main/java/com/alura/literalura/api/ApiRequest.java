@@ -1,8 +1,7 @@
 package com.alura.literalura.api;
 
 import com.alura.literalura.assemblers.BookAssembler;
-import com.alura.literalura.dto.Book;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.alura.literalura.dto.BookDTO;
 
 import java.io.IOException;
 import java.net.URI;
@@ -13,33 +12,32 @@ import java.util.List;
 
 public class ApiRequest {
 
-
     private final BookAssembler bookAssembler;
 
-    public ApiRequest(){
+    public ApiRequest() {
         this.bookAssembler = new BookAssembler();
     }
 
-    public Book getBookById(Integer bookId) throws IOException, InterruptedException {
-        final String URL = String.format("https://gutendex.com/books/%d/",bookId);
+    public BookDTO getBookById(Integer bookId) throws IOException, InterruptedException {
+        final String URL = String.format("https://gutendex.com/books/%d/", bookId);
         HttpClient httpClient = HttpClient.newBuilder().build();
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(URI.create(URL))
                 .GET()
                 .build();
 
-        HttpResponse<String> response = httpClient.send(httpRequest,HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
         return bookAssembler.fromResponseToDTO(response);
     }
 
-    public List<Book> searchByTitle(String title) throws IOException, InterruptedException {
-        final String URL = String.format("https://gutendex.com/books/?search=%s",title);
+    public List<BookDTO> searchByTitle(String title) throws IOException, InterruptedException {
+        final String URL = String.format("https://gutendex.com/books/?search=%s", title);
         HttpClient httpClient = HttpClient.newBuilder().build();
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(URI.create(URL))
                 .GET()
                 .build();
-        HttpResponse<String> response = httpClient.send(httpRequest,HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
         return bookAssembler.fromResponseToListDTO(response);
     }
 }
