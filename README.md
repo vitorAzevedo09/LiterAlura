@@ -21,11 +21,11 @@ The Literalura Application is a Spring Boot console application designed to inte
 ### Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/literalura.git
+   git clone git@github.com:vitorAzevedo09/LiterAlura.git
    ```
 2. Navigate to the project directory:
    ```bash
-   cd literalura
+   cd Literalura
    ```
 3. Build the project using Maven:
    ```bash
