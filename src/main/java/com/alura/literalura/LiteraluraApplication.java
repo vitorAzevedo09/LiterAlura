@@ -25,100 +25,117 @@ public class LiteraluraApplication implements CommandLineRunner {
 	}
 
 	@Override
-	public void run(String... args) throws Exception {
-		menu();
+	public void run(String... args) {
+		try {
+			displayMenu();
+		} catch (IOException | InterruptedException e) {
+			System.err.println("An error occurred while running the application: " + e.getMessage());
+		}
 	}
 
-	private void menu() throws IOException, InterruptedException {
+	private void displayMenu() throws IOException, InterruptedException {
 		Scanner scanner = new Scanner(System.in);
 		int selectedOption = -1;
-		while (selectedOption != 0) {
-			System.out.println("__________BANCO DE LIVROS GUTENBERG__________");
-			System.out.println("Selecione uma opção: ");
-			System.out.println("1 - Pesquisar Por Título");
-			System.out.println("2 - Listar todos os Livros já buscados");
-			System.out.println("3 - Listar todos os Autores de Livros já buscados");
-			System.out.println("4 - Listar todos os Autores de Livros já buscados vivos em um ano");
-			System.out.println("0 - Sair \n");
-			System.out.print("Insira a opção escolhida: ");
 
+		while (selectedOption != 0) {
+			printMenu();
 			selectedOption = scanner.nextInt();
-			scanner.nextLine(); // Limpa o buffer do scanner
+			scanner.nextLine(); // Clear the scanner buffer
 
 			switch (selectedOption) {
-				case 0:
-					break;
-				case 1:
-					searchBook(scanner);
-					break;
-				case 2:
-					showAllBooksInDB();
-					break;
-				case 3:
-					showAllAuthorsInDB();
-					break;
-				case 4:
-					showAllAuthorsAliveInDB(scanner);
-					break;
-				default:
-					System.out.println("Opção inválida, por favor escolha novamente.");
+				case 0 -> System.out.println("Exiting...");
+				case 1 -> searchBook(scanner);
+				case 2 -> listAllBooks();
+				case 3 -> listAllAuthors();
+				case 4 -> listAuthorsAliveInYear(scanner);
+				case 5 -> listBooksByLanguage(scanner);
+				default -> System.out.println("Invalid option, please try again.");
 			}
 		}
 		scanner.close();
 	}
 
-	private void searchBook(Scanner scanner) throws IOException, InterruptedException {
+	private void printMenu() {
+		System.out.println("__________BANCO DE LIVROS GUTENBERG__________");
+		System.out.println("Select an option: ");
+		System.out.println("1 - Search by Title");
+		System.out.println("2 - List all Searched Books");
+		System.out.println("3 - List all Authors of Searched Books");
+		System.out.println("4 - List all Living Authors in a Given Year");
+		System.out.println("5 - List Books by Language");
+		System.out.println("0 - Exit \n");
+		System.out.print("Enter your choice: ");
+	}
 
-		System.out.print("Insira o título do livro que deseja pesquisar: ");
+	private void searchBook(Scanner scanner) throws IOException, InterruptedException {
+		System.out.print("Enter the book title to search: ");
 		String title = scanner.nextLine();
-		System.out.println("Carregando, por favor espere...");
+		System.out.println("Loading, please wait...");
+
 		Optional<Book> book = bookService.searchByTitle(title);
-		if (book.isEmpty()) {
-			System.out.println("Livro não encontrado, por favor, tente novamente");
+		if (book.isPresent()) {
+			displayBookDetails(book.get());
 		} else {
-			Book firstBook = book.get();
-			System.out.println("-----------------------------------------------");
-			System.out.println("Título do Livro: " + firstBook.getTitle());
-			System.out.println("Autor do Livro: " + firstBook.getAuthorName());
-			System.out.println("Idioma do Livro: " + firstBook.getLanguage());
-			System.out.println("Número de Downloads do Livro: " + firstBook.getDownload_count());
-			System.out.println("-----------------------------------------------");
+			System.out.println("Book not found, please try again.");
 		}
 	}
 
-	private void showAllBooksInDB() throws IOException, InterruptedException {
-		System.out.println("Carregando, por favor espere...");
+	private void displayBookDetails(Book book) {
+		System.out.println("-----------------------------------------------");
+		System.out.println("Book Title: " + book.getTitle());
+		System.out.println("Book Author: " + book.getAuthorName());
+		System.out.println("Book Language: " + book.getLanguage());
+		System.out.println("Book Downloads: " + book.getDownload_count());
+		System.out.println("-----------------------------------------------");
+	}
+
+	private void listAllBooks() throws IOException, InterruptedException {
+		System.out.println("Loading, please wait...");
 		List<Book> books = bookService.getAllBooksInDB();
 		for (Book book : books) {
-			System.out.println("-----------------------------------------------");
-			System.out.println("Título do Livro: " + book.getTitle());
-			System.out.println("Autor do Livro: " + book.getAuthorName());
-			System.out.println("Idioma do Livro: " + book.getLanguage());
-			System.out.println("Número de Downloads do Livro: " + book.getDownload_count());
-			System.out.println("-----------------------------------------------");
+			displayBookDetails(book);
 		}
 	}
 
-	private void templateAuthors(List<Author> authors) {
-		System.out.println("Carregando, por favor espere...");
+	private void listAllAuthors() throws IOException, InterruptedException {
+		System.out.println("Loading, please wait...");
+		List<Author> authors = bookService.getAllAuthorsInDB();
+		displayAuthorDetails(authors);
+	}
+
+	private void listAuthorsAliveInYear(Scanner scanner) throws IOException, InterruptedException {
+		System.out.print("Enter the year: ");
+		int year = scanner.nextInt();
+		System.out.println("Loading, please wait...");
+
+		List<Author> authors = bookService.getAllAuthorsInDBAliveInYear(year);
+		displayAuthorDetails(authors);
+	}
+
+	private void displayAuthorDetails(List<Author> authors) {
 		for (Author author : authors) {
 			System.out.println("-----------------------------------------------");
-			System.out.println("Autor do Livro: " + author.getName());
-			System.out.println("Ano de Nascimento: " + author.getBirth_year());
-			System.out.println("Ano de Falecimento: " + author.getDeath_year());
+			System.out.println("Author Name: " + author.getName());
+			System.out.println("Birth Year: " + author.getBirth_year());
+			System.out.println("Death Year: " + author.getDeath_year());
 			System.out.println("-----------------------------------------------");
 		}
 	}
 
-	private void showAllAuthorsInDB() throws IOException, InterruptedException {
-		List<Author> authors = bookService.getAllAuthorsInDB();
-		templateAuthors(authors);
-	}
+	private void listBooksByLanguage(Scanner scanner) {
+		System.out.println("Choose the language to view:");
+		System.out.println("1 - English");
+		System.out.println("2 - French");
+		int languageChoice = scanner.nextInt();
 
-	private void showAllAuthorsAliveInDB(Scanner scanner) throws IOException, InterruptedException {
-		System.out.println("Digite o ano escolhido: ");
-		Integer year = scanner.nextInt();
-		List<Author> authors = bookService.getAllAuthorsInDBAliveInYear(year);
-		templateAuthors(authors);
+		switch (languageChoice) {
+			case 1 -> System.out
+					.println(String.format("\n\n\nThere are %d books written in English\n\n\n",
+							bookService.quantityBooksByLanguage("en")));
+			case 2 -> System.out
+					.println(String.format("\n\n\nThere are %d books written in French\n\n\n",
+							bookService.quantityBooksByLanguage("fr")));
+			default -> System.out.println("Invalid choice, please try again.");
+		}
 	}
 }

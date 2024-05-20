@@ -15,4 +15,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
   Book findByApiId(Long apiId);
 
+  Integer countByLanguage(final String language);
+
 }
