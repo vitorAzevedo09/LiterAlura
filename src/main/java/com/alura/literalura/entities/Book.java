@@ -95,4 +95,8 @@ public class Book {
     this.apiId = api_id;
   }
 
+  public void setAuthorName(String authorName) {
+    this.author.setName(authorName);
+  }
+
 }

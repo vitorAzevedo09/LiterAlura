@@ -18,7 +18,7 @@ import java.util.Scanner;
 public class LiteraluraApplication implements CommandLineRunner {
 
 	@Autowired
-	private BookService bookService;
+	public BookService bookService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(LiteraluraApplication.class, args);
@@ -33,7 +33,7 @@ public class LiteraluraApplication implements CommandLineRunner {
 		}
 	}
 
-	private void displayMenu() throws IOException, InterruptedException {
+	public void displayMenu() throws IOException, InterruptedException {
 		Scanner scanner = new Scanner(System.in);
 		int selectedOption = -1;
 
@@ -55,7 +55,7 @@ public class LiteraluraApplication implements CommandLineRunner {
 		scanner.close();
 	}
 
-	private void printMenu() {
+	public void printMenu() {
 		System.out.println("__________BANCO DE LIVROS GUTENBERG__________");
 		System.out.println("Select an option: ");
 		System.out.println("1 - Search by Title");
@@ -67,7 +67,7 @@ public class LiteraluraApplication implements CommandLineRunner {
 		System.out.print("Enter your choice: ");
 	}
 
-	private void searchBook(Scanner scanner) throws IOException, InterruptedException {
+	public void searchBook(Scanner scanner) throws IOException, InterruptedException {
 		System.out.print("Enter the book title to search: ");
 		String title = scanner.nextLine();
 		System.out.println("Loading, please wait...");
@@ -80,7 +80,7 @@ public class LiteraluraApplication implements CommandLineRunner {
 		}
 	}
 
-	private void displayBookDetails(Book book) {
+	public void displayBookDetails(Book book) {
 		System.out.println("-----------------------------------------------");
 		System.out.println("Book Title: " + book.getTitle());
 		System.out.println("Book Author: " + book.getAuthorName());
@@ -89,7 +89,7 @@ public class LiteraluraApplication implements CommandLineRunner {
 		System.out.println("-----------------------------------------------");
 	}
 
-	private void listAllBooks() throws IOException, InterruptedException {
+	public void listAllBooks() throws IOException, InterruptedException {
 		System.out.println("Loading, please wait...");
 		List<Book> books = bookService.getAllBooksInDB();
 		for (Book book : books) {
@@ -97,13 +97,13 @@ public class LiteraluraApplication implements CommandLineRunner {
 		}
 	}
 
-	private void listAllAuthors() throws IOException, InterruptedException {
+	public void listAllAuthors() throws IOException, InterruptedException {
 		System.out.println("Loading, please wait...");
 		List<Author> authors = bookService.getAllAuthorsInDB();
 		displayAuthorDetails(authors);
 	}
 
-	private void listAuthorsAliveInYear(Scanner scanner) throws IOException, InterruptedException {
+	public void listAuthorsAliveInYear(Scanner scanner) throws IOException, InterruptedException {
 		System.out.print("Enter the year: ");
 		int year = scanner.nextInt();
 		System.out.println("Loading, please wait...");
@@ -112,7 +112,7 @@ public class LiteraluraApplication implements CommandLineRunner {
 		displayAuthorDetails(authors);
 	}
 
-	private void displayAuthorDetails(List<Author> authors) {
+	public void displayAuthorDetails(List<Author> authors) {
 		for (Author author : authors) {
 			System.out.println("-----------------------------------------------");
 			System.out.println("Author Name: " + author.getName());
@@ -122,7 +122,7 @@ public class LiteraluraApplication implements CommandLineRunner {
 		}
 	}
 
-	private void listBooksByLanguage(Scanner scanner) {
+	public void listBooksByLanguage(Scanner scanner) {
 		System.out.println("Choose the language to view:");
 		System.out.println("1 - English");
 		System.out.println("2 - French");
